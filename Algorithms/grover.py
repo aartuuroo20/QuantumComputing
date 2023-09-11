@@ -19,11 +19,13 @@ def is_Palindrome(nqubits): #No entiendo muy bien como funciona
     routine = QRoutine()
     first_half = routine.new_wires(nqubits)
     second_half = routine.new_wires(nqubits)
-    for w1, w2 in zip(first_half, reversed(second_half)):
-        CNOT(w1, w2)
-    for w2 in second_half:
-        X(w2)
+    with routine.compute():
+        for w1, w2 in zip(first_half, reversed(second_half)):
+            CNOT(w1, w2)
+        for w2 in second_half:
+            X(w2)
     Z.ctrl(nqubits - 1)(second_half)
+    routine.uncompute()
     return routine
 
 qprogram = Program()
@@ -54,6 +56,3 @@ for sample in result:
     print("State %s probability %s" % (sample.state, sample.probability))
 
 circuit.display()
-
-
-
