@@ -8,12 +8,12 @@ import numpy as np
 
 #Creamos el difusor el cual cambia la amplitud de las soluciones correctas para aumentar a prob de encontrarlas
 def diffusor(k):
-    routine = QRoutine() #Creamos una rutina cuantica la cual nos permite crear puertas abstractas (puertas personalizadas)
+    routine = QRoutine() #Creamos una rutina cuantica la cual nos permite crear puertas abstractas (puertas personalizadas) y creara la "caja"
     wires = routine.new_wires(2 * k) # Creamos una lista de cables de tamaño 2*nqubits (4)
     for wire in wires: #Aplicamos la puerta H y una puerta X a todos los cables
         H(wire)
         X(wire)
-    Z.ctrl(2 * k - 1)(wires) #Aplicamos la puerta Z controlada a todos los cables la cual cambia de signo la amplitud de la solucion correcta
+    Z.ctrl(2 * k - 1)(wires) #Aplicamos la puerta Z controlada a todos los cables la cual amplia la amplitud de las soluciones correctas. En todos los cables aplicar puerta CZ
     for wire in wires: #Aplicamos la puerta X y una puerta H a todos los cables
         X(wire)
         H(wire)
