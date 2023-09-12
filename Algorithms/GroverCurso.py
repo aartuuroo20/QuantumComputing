@@ -46,6 +46,17 @@ def diffusor(k):
     routine.uncompute()
     return routine
 
+numeroSoluciones = len(lista)
+numeroIteraciones = int(math.pi / (4 * arccos(sqrt(1 - numeroSoluciones / numero))))
+print("Numero de iteraciones: %d" % numeroIteraciones)
+
+probabilidad = sin((2 * numeroIteraciones + 1) * arccos(sqrt((numero - numeroSoluciones)/ numero)))**2
+print("Probabilidad de encontrar la solucion: %f" %probabilidad)
+
+
+
+
+
 
 
 
