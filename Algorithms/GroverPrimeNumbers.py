@@ -3,53 +3,55 @@ import math
 from qat.lang.AQASM import Program, H, X, Z, QRoutine, CustomGate
 from qat.qpus import get_default_qpu
 
-class Matriz:
-    def __init__(self, filas, columnas):
-        self.filas = filas
-        self.columnas = columnas
-        self.matriz = zeros((filas, columnas))
+#We create a matrix class which will be initialized with 0 making a matrix of size number x number also 
+#we create a function to fill the diagonal of the matrix with -1 and 1 depending if the number is prime or not
+class Matrix:
+    def __init__(self, rows, columns):
+        self.rows = rows
+        self.columns = columns
+        self.matrix = zeros((rows, columns))
 
-    def print_matriz(self):
-        print(self.matriz)
+    def print_matrix(self):
+        print(self.matrix)
 
-    def cubrir_diagonal(self):
-        for i in range(len(self.matriz)):
-            if i in lista:
-                self.matriz[i][i] = -1
+    def fill_diagonal(self):
+        for i in range(len(self.matrix)):
+            if i in list:
+                self.matrix[i][i] = -1
             else:
-                self.matriz[i][i] = 1
+                self.matrix[i][i] = 1
 
 qubits = 4
-numero = 2**qubits
-lista = []
-# Recorre todos los números hasta n y almacena los números primos en una lista
-for num in range(numero):
-   # Todos los números primos son mayores que 1
+number = 2**qubits
+list = []
+# We create a list with all the prime numbers from 0 to number 
+for num in range(number):
+   # all prime numbers are greater than 1
    if num > 1:
        for i in range(2, num):
            if (num % i) == 0:
                break
        else:
-           lista.append(num)
+           list.append(num)
+# We print the list of prime numbers
+print(list)
 
-print(lista)
+matrix = Matrix(number, number) #We initialize the matrix with size number x number and fill of 0
+matrix.print_matrix() #We print the matrix with 0
 
-matriz = Matriz(numero, numero) #Inicializamos la matriz con ceros de tamaño numero x numero
-matriz.print_matriz() #Imprimimos la matriz con ceros
+matrix.fill_diagonal() #We fill the diagonal with -1 and 1
 
-matriz.cubrir_diagonal() #Cubrimos la diagonal de la matriz con -1 y 1
+matrix_prime = CustomGate(matrix.matrix) #We create a custom gate with the matrix to be able to use it in the oracle
+matrix.print_matrix() #We print the matrix with -1 and 1
 
-matriz_primos = CustomGate(matriz.matriz) #Creamos una puerta personalizada con la matriz para poder operar
-matriz.print_matriz() #Imprimimos la matriz con -1 y 1
-
-#Definimos el oracle 
-def oraculo(k, matriz_primos):
+#We define the oracle 
+def oraculo(k, matrix_prime):
     routine = QRoutine()
     wires = routine.new_wires(k)
-    matriz_primos(wires)
+    matrix_prime(wires)
     return routine
 
-#Definimos el difusor
+#We define the difusor
 def diffusor(k):
     routine = QRoutine()
     wires = routine.new_wires(k)
@@ -61,20 +63,21 @@ def diffusor(k):
     routine.uncompute()
     return routine
 
-m = len(lista)
-n = numero
-print("Numero de soluciones: %d" % m)
-k = int(math.pi / (4 * arccos(sqrt(1 - m / n))))
-print("Numero de iteraciones: %d" % k)
+m = len(list)
+n = number
 
-probabilidad = sin((2 * k + 1) * arccos(sqrt((n - m) / n)))**2
-print("Probabilidad de encontrar la solucion: %f" %probabilidad)
+print("Number of solutions: %d" % m)
+k = int(math.pi / (4 * arccos(sqrt(1 - m / n))))
+print("Number of iterations: %d" % k)
+
+probability = sin((2 * k + 1) * arccos(sqrt((n - m) / n)))**2
+print("Probability of finding a solution: %f" %probability)
 
 qprog = Program()
 nqbits = qprog.qalloc(qubits)
 
 difusor = diffusor(qubits)
-oracle = oraculo(qubits, matriz_primos)
+oracle = oraculo(qubits, matrix_prime)
 
 for qbit in nqbits:
     H(qbit)
