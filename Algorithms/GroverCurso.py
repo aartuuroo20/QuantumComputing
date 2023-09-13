@@ -3,6 +3,22 @@ import math
 from qat.lang.AQASM import Program, H, X, Z, QRoutine, CustomGate
 from qat.qpus import get_default_qpu
 
+class Matriz:
+    def __init__(self, filas, columnas):
+        self.filas = filas
+        self.columnas = columnas
+        self.matriz = zeros((filas, columnas))
+
+    def print_matriz(self):
+        print(self.matriz)
+
+    def cubrir_diagonal(self):
+        for i in range(len(self.matriz)):
+            if i in lista:
+                self.matriz[i][i] = -1
+            else:
+                self.matriz[i][i] = 1
+
 qubits = 4
 numero = 2**qubits
 lista = []
@@ -18,17 +34,13 @@ for num in range(numero):
 
 print(lista)
 
-matriz = zeros((numero,numero)) #Inicializamos la matriz con ceros de tamaño numero x numero
-print(matriz) #Imprimimos la matriz de todo 0
+matriz = Matriz(numero, numero) #Inicializamos la matriz con ceros de tamaño numero x numero
+matriz.print_matriz() #Imprimimos la matriz con ceros
 
-for i in range(len(matriz)): #Recorremos la diagonal de la matriz
-    if i in lista: #Comprobamos si el numero es primo comrpobando si esta en la lista
-        matriz[i][i] = -1 #Si es primo cambiamos a -1
-    else: 
-        matriz[i][i] = 1 #Si no es primo no cambiamos a 1
+matriz.cubrir_diagonal() #Cubrimos la diagonal de la matriz con -1 y 1
 
-matriz_primos = CustomGate(matriz) #Creamos una puerta personalizada con la matriz para poder operar
-print(matriz) #Imprimimos la matriz con los valores cambiados
+matriz_primos = CustomGate(matriz.matriz) #Creamos una puerta personalizada con la matriz para poder operar
+matriz.print_matriz() #Imprimimos la matriz con -1 y 1
 
 #Definimos el oracle 
 def oraculo(k, matriz_primos):
@@ -49,12 +61,13 @@ def diffusor(k):
     routine.uncompute()
     return routine
 
-numeroSoluciones = len(lista)
-print("Numero de soluciones: %d" % numeroSoluciones)
-numeroIteraciones = int(math.pi / (4 * arccos(sqrt(1 - numeroSoluciones / numero))))
-print("Numero de iteraciones: %d" % numeroIteraciones)
+m = len(lista)
+n = numero
+print("Numero de soluciones: %d" % m)
+k = int(math.pi / (4 * arccos(sqrt(1 - m / n))))
+print("Numero de iteraciones: %d" % k)
 
-probabilidad = sin((2 * numeroIteraciones + 1) * arccos(sqrt((numero - numeroSoluciones) / numero)))**2
+probabilidad = sin((2 * k + 1) * arccos(sqrt((n - m) / n)))**2
 print("Probabilidad de encontrar la solucion: %f" %probabilidad)
 
 qprog = Program()
@@ -66,7 +79,7 @@ oracle = oraculo(qubits, matriz_primos)
 for qbit in nqbits:
     H(qbit)
 
-for _ in range(numeroIteraciones):
+for _ in range(k):
     oracle(nqbits)
     difusor(nqbits)
     
