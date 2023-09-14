@@ -90,9 +90,12 @@ circuit = qprog.to_circ()
 job = circuit.to_job()
 result = get_default_qpu().submit(job)
 
+archivo = open("soluciones.txt", "x")
 for sample in result:
     print("State %s probability %s" % (sample.state, sample.probability))
+    archivo.write("%s, %s \n" %(sample.state, sample.probability))
 
+archivo.close()
 circuit.display()
 
 
