@@ -1,83 +1,125 @@
 import json
 import pandas as pd
 
-ruta_archivo = "C:/Users/a913353/Downloads/perth_3_8_23_H_18.json"
-with open(ruta_archivo, "r") as archivo:
-    data = archivo.read()
+def filter(nombre_archivo):
+    try:
+        with open(nombre_archivo, 'r') as archivo:
+            data = json.load(archivo)
 
-data = json.loads(data)
+        t1_values = []
+        t2_values = []
+        readout_error_values = []
+        readout_length_values = []
+        prob_01_values = []
+        prob_10_values = []
 
-archivo = "archivo.csv"
-medias = "medias.csv"
+        rz_error_values = []
+        rz_length_values = []
+        x_error_values = []
+        x_length_values = []
+        sx_error_values = []
+        sx_length_values = []
+        cnot_error_values = []
+        cnot_length_values = []
 
-for i in range(len(data['qubits'])):
-    datos_t1 = list(map(lambda y: y[i]['value'], filter(lambda x: x[i]['name'] == 'T1', data['qubits'])))
+        for qubit_data in data['qubits']:
+            for measurement in qubit_data:
+                if measurement['name'] == 'T1':
+                    t1_values.append(measurement['value'])
+                elif measurement['name'] == 'T2':
+                    t2_values.append(measurement['value'])
+                elif measurement['name'] == 'readout_error':
+                    readout_error_values.append(measurement['value'])
+                elif measurement['name'] == 'readout_length':
+                    readout_length_values.append(measurement['value'])
+                elif measurement['name'] == 'prob_meas0_prep1':
+                    prob_01_values.append(measurement['value'])
+                elif measurement['name'] == 'prob_meas1_prep0':
+                    prob_10_values.append(measurement['value'])
+                else:
+                    pass
+        
+        for gate_data in data['gates']:
+            if gate_data['gate'] == 'rz':
+                rz_error_values.append(gate_data['parameters'][0]['value'])
+                rz_length_values.append(gate_data['parameters'][1]['value'])
+            elif gate_data['gate'] == 'x':
+                x_error_values.append(gate_data['parameters'][0]['value'])
+                x_length_values.append(gate_data['parameters'][1]['value'])
+            elif gate_data['gate'] == 'sx':
+                sx_error_values.append(gate_data['parameters'][0]['value'])
+                sx_length_values.append(gate_data['parameters'][1]['value'])
+            elif gate_data['gate'] == 'cx':
+                cnot_error_values.append(gate_data['parameters'][0]['value'])
+                cnot_length_values.append(gate_data['parameters'][1]['value'])
+            else:
+                pass
 
-datos_t2 = list(map(lambda y: y[1]['value'], filter(lambda x: x[1]['name'] == 'T2', data['qubits'])))
-datos_readout_error = list(map(lambda y: y[4]['value'], filter(lambda x: x[4]['name'] == 'readout_error', data['qubits'])))
-datos_readout_length = list(map(lambda y: y[7]['value'], filter(lambda x: x[7]['name'] == 'readout_length', data['qubits'])))
-datos_prob_01 = list(map(lambda y: y[5]['value'], filter(lambda x: x[5]['name'] == 'prob_meas0_prep1', data['qubits'])))
-datos_prob_10 = list(map(lambda y: y[6]['value'], filter(lambda x: x[6]['name'] == 'prob_meas1_prep0', data['qubits'])))
+        return t1_values, t2_values, readout_error_values, readout_length_values, prob_01_values, prob_10_values, rz_error_values, rz_length_values, x_error_values, x_length_values, sx_error_values, sx_length_values, cnot_error_values, cnot_length_values
 
-datos_rz_error = list(map(lambda y: y['parameters'][0]['value'], filter(lambda x: x['gate'] == 'rz', data['gates'])))
-datos_rz_length = list(map(lambda y: y['parameters'][1]['value'], filter(lambda x: x['gate'] == 'rz', data['gates'])))
-datos_x_error = list(map(lambda y: y['parameters'][0]['value'], filter(lambda x: x['gate'] == 'x', data['gates'])))
-datos_x_length = list(map(lambda y: y['parameters'][1]['value'], filter(lambda x: x['gate'] == 'x', data['gates'])))
-datos_sx_error = list(map(lambda y: y['parameters'][0]['value'], filter(lambda x: x['gate'] == 'sx', data['gates'])))
-datos_sx_length = list(map(lambda y: y['parameters'][1]['value'], filter(lambda x: x['gate'] == 'sx', data['gates'])))
-datos_cnot_error = list(map(lambda y: y['parameters'][0]['value'], filter(lambda x: x['gate'] == 'cx', data['gates'])))
-datos_cnot_length = list(map(lambda y: y['parameters'][1]['value'], filter(lambda x: x['gate'] == 'cx', data['gates'])))
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error: {e}")
+        return [], []
+    
+def mean(lista):
+    return sum(lista) / len(lista)
+
+nombre_archivo = "C:/Users/a913353/Downloads/perth_3_8_23_H_18.json"
+file = "archivo.csv"
+means = "medias.csv"
+
+t1_values, t2_values, readout_error_values, readout_length_values, prob_01_values, prob_10_values, rz_error_values, rz_length_values, x_error_values, x_length_values, sx_error_values, sx_length_values, cnot_error_values, cnot_length_values  = filter(nombre_archivo)
 
 datos = {
-    'T1': datos_t1,
-    'T2': datos_t2,
-    'readout_error': datos_readout_error,
-    'readout_length': datos_readout_length,
-    'prob_meas0_prep1': datos_prob_01,
-    'prob_meas1_prep0': datos_prob_10,
-    'rz_error': datos_rz_error,
-    'x_error': datos_x_error,
-    'x_length': datos_rz_length,
-    'sx_error': datos_sx_error,
-    'sx_length': datos_sx_length
+    'T1': t1_values,
+    'T2': t2_values,
+    'readout_error': readout_error_values,
+    'readout_length': readout_length_values,
+    'prob_meas0_prep1': prob_01_values,
+    'prob_meas1_prep0': prob_10_values,
+    'rz_error': rz_error_values,
+    'x_error': x_error_values,
+    'x_length': rz_length_values,
+    'sx_error': sx_error_values,
+    'sx_length': sx_length_values,
 }
 
 df = pd.DataFrame(datos)
+print(df)
+df.to_csv(file, index=False)
 
-df.to_csv(archivo, index=False)
+mediaT1 = mean(t1_values)
+mediaT2 = mean(t2_values)
+mediaReadoutError = mean(readout_error_values)
+mediaReadoutLength = mean(readout_length_values)
+mediaProb01 = mean(prob_01_values)
+mediaProb10 = mean(prob_10_values)
+mediaRzError = mean(rz_error_values)
+mediaRzLength = mean(rz_length_values)
+mediaXError = mean(x_error_values)
+mediaXLength = mean(x_length_values)
+mediaSxError = mean(sx_error_values)
+mediaSxLength = mean(sx_length_values)
+mediaCnotError = mean(cnot_error_values)
+mediaCnotLength = mean(cnot_length_values)
 
-mediaT1 = sum(datos_t1) / len(datos_t1)
-mediaT2 = sum(datos_t2) / len(datos_t2)
-mediaReadoutError = sum(datos_readout_error) / len(datos_readout_error)
-mediaReadoutLength = sum(datos_readout_length) / len(datos_readout_length)
-mediaProb01 = sum(datos_prob_01) / len(datos_prob_01)
-mediaProb10 = sum(datos_prob_10) / len(datos_prob_10)
-
-mediaRz = (sum(datos_rz_error) + sum(datos_readout_length)) / len(datos_rz_error)
-mediaX = (sum(datos_x_error) + sum(datos_x_length)) / len(datos_x_error)
-mediaSx = (sum(datos_sx_error) + sum(datos_sx_length)) / len(datos_sx_error)
-mediaCnot = (sum(datos_cnot_error) + sum(datos_cnot_length)) / len(datos_cnot_error)
-
-datos2 = {
-    'T1': [mediaT1],
-    'T2': [mediaT2],
-    'readout_error': [mediaReadoutError],
-    'readout_length': [mediaReadoutLength],
-    'prob_meas0_prep1': [mediaProb01],
-    'prob_meas1_prep0': [mediaProb10],
-    'Rz': [mediaRz],
-    'X': [mediaX],
-    'Sx': [mediaSx],
-    'Cnot': [mediaCnot]
+means = {
+    'T1': mediaT1,
+    'T2': mediaT2,
+    'readout_error': mediaReadoutError,
+    'readout_length': mediaReadoutLength,
+    'prob_meas0_prep1': mediaProb01,
+    'prob_meas1_prep0': mediaProb10,
+    'rz_error': mediaRzError,
+    'rz_length': mediaRzLength,
+    'x_error': mediaXError,
+    'x_length': mediaXLength,
+    'sx_error': mediaSxError,
+    'sx_length': mediaSxLength,
+    'cnot_error': mediaCnotError,
+    'cnot_length': mediaCnotLength
 }
 
-df2 = pd.DataFrame(datos2, index=[0])
-df2.to_csv(medias, index=False)
-
-
-
-
-
-
-
-
+df2 = pd.DataFrame(means, index=[0])
+print(df2)
+df2.to_csv("medias.csv", index=False)
