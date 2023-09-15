@@ -10,7 +10,9 @@ data = json.loads(data)
 archivo = "archivo.csv"
 medias = "medias.csv"
 
-datos_t1 = list(map(lambda y: y[0]['value'], filter(lambda x: x[0]['name'] == 'T1', data['qubits'])))
+for i in range(len(data['qubits'])):
+    datos_t1 = list(map(lambda y: y[i]['value'], filter(lambda x: x[i]['name'] == 'T1', data['qubits'])))
+
 datos_t2 = list(map(lambda y: y[1]['value'], filter(lambda x: x[1]['name'] == 'T2', data['qubits'])))
 datos_readout_error = list(map(lambda y: y[4]['value'], filter(lambda x: x[4]['name'] == 'readout_error', data['qubits'])))
 datos_readout_length = list(map(lambda y: y[7]['value'], filter(lambda x: x[7]['name'] == 'readout_length', data['qubits'])))
@@ -41,7 +43,7 @@ datos = {
 }
 
 df = pd.DataFrame(datos)
-print(df)
+
 df.to_csv(archivo, index=False)
 
 mediaT1 = sum(datos_t1) / len(datos_t1)
@@ -70,7 +72,6 @@ datos2 = {
 }
 
 df2 = pd.DataFrame(datos2, index=[0])
-print(df2)
 df2.to_csv(medias, index=False)
 
 
