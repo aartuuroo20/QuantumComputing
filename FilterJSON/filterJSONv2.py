@@ -1,76 +1,83 @@
 import json
 import pandas as pd
 
-def filter(nombre_archivo):
-    try:
-        with open(nombre_archivo, 'r') as archivo:
-            data = json.load(archivo)
+class FilterJSON:
+    def __init__(self, nombre_archivo):
+        self.nombre_archivo = nombre_archivo
 
-        t1_values = []
-        t2_values = []
-        readout_error_values = []
-        readout_length_values = []
-        prob_01_values = []
-        prob_10_values = []
 
-        rz_error_values = []
-        rz_length_values = []
-        x_error_values = []
-        x_length_values = []
-        sx_error_values = []
-        sx_length_values = []
-        cnot_error_values = []
-        cnot_length_values = []
+    def filter(nombre_archivo):
+        try:
+            with open(nombre_archivo, 'r') as archivo:
+                data = json.load(archivo)
 
-        for qubit_data in data['qubits']:
-            for measurement in qubit_data:
-                if measurement['name'] == 'T1':
-                    t1_values.append(measurement['value'])
-                elif measurement['name'] == 'T2':
-                    t2_values.append(measurement['value'])
-                elif measurement['name'] == 'readout_error':
-                    readout_error_values.append(measurement['value'])
-                elif measurement['name'] == 'readout_length':
-                    readout_length_values.append(measurement['value'])
-                elif measurement['name'] == 'prob_meas0_prep1':
-                    prob_01_values.append(measurement['value'])
-                elif measurement['name'] == 'prob_meas1_prep0':
-                    prob_10_values.append(measurement['value'])
+            t1_values = []
+            t2_values = []
+            readout_error_values = []
+            readout_length_values = []
+            prob_01_values = []
+            prob_10_values = []
+
+            rz_error_values = []
+            rz_length_values = []
+            x_error_values = []
+            x_length_values = []
+            sx_error_values = []
+            sx_length_values = []
+            cnot_error_values = []
+            cnot_length_values = []
+
+            for qubits in data['qubits']:
+                for qubit_data in qubits:
+                    if qubit_data['name'] == 'T1':
+                        t1_values.append(qubit_data['value'])
+                    elif qubit_data['name'] == 'T2':
+                        t2_values.append(qubit_data['value'])
+                    elif qubit_data['name'] == 'readout_error':
+                        readout_error_values.append(qubit_data['value'])
+                    elif qubit_data['name'] == 'readout_length':
+                        readout_length_values.append(qubit_data['value'])
+                    elif qubit_data['name'] == 'prob_meas0_prep1':
+                        prob_01_values.append(qubit_data['value'])
+                    elif qubit_data['name'] == 'prob_meas1_prep0':
+                        prob_10_values.append(qubit_data['value'])
+                    else:
+                        pass
+        
+            for gate_data in data['gates']:
+                if gate_data['gate'] == 'rz':
+                    rz_error_values.append(gate_data['parameters'][0]['value'])
+                    rz_length_values.append(gate_data['parameters'][1]['value'])
+                elif gate_data['gate'] == 'x':
+                    x_error_values.append(gate_data['parameters'][0]['value'])
+                    x_length_values.append(gate_data['parameters'][1]['value'])
+                elif gate_data['gate'] == 'sx':
+                    sx_error_values.append(gate_data['parameters'][0]['value'])
+                    sx_length_values.append(gate_data['parameters'][1]['value'])
+                elif gate_data['gate'] == 'cx':
+                    cnot_error_values.append(gate_data['parameters'][0]['value'])
+                    cnot_length_values.append(gate_data['parameters'][1]['value'])
                 else:
                     pass
+
+            return t1_values, t2_values, readout_error_values, readout_length_values, prob_01_values, prob_10_values, rz_error_values, rz_length_values, x_error_values, x_length_values, sx_error_values, sx_length_values, cnot_error_values, cnot_length_values
+
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Error: {e}")
+            return [], []
         
-        for gate_data in data['gates']:
-            if gate_data['gate'] == 'rz':
-                rz_error_values.append(gate_data['parameters'][0]['value'])
-                rz_length_values.append(gate_data['parameters'][1]['value'])
-            elif gate_data['gate'] == 'x':
-                x_error_values.append(gate_data['parameters'][0]['value'])
-                x_length_values.append(gate_data['parameters'][1]['value'])
-            elif gate_data['gate'] == 'sx':
-                sx_error_values.append(gate_data['parameters'][0]['value'])
-                sx_length_values.append(gate_data['parameters'][1]['value'])
-            elif gate_data['gate'] == 'cx':
-                cnot_error_values.append(gate_data['parameters'][0]['value'])
-                cnot_length_values.append(gate_data['parameters'][1]['value'])
-            else:
-                pass
+    def mean(lista):
+        mean = sum(lista) / len(lista)
+        return mean
 
-        return t1_values, t2_values, readout_error_values, readout_length_values, prob_01_values, prob_10_values, rz_error_values, rz_length_values, x_error_values, x_length_values, sx_error_values, sx_length_values, cnot_error_values, cnot_length_values
+json_file_name = "C:/Users/a913353/Downloads/perth_3_8_23_H_18.json"
+file_data = "data.csv"
+file_means = "means.csv"
 
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error: {e}")
-        return [], []
-    
-def mean(lista):
-    return sum(lista) / len(lista)
+json1 = FilterJSON(json_file_name)
+t1_values, t2_values, readout_error_values, readout_length_values, prob_01_values, prob_10_values, rz_error_values, rz_length_values, x_error_values, x_length_values, sx_error_values, sx_length_values, cnot_error_values, cnot_length_values = json1.filter(json_file_name)
 
-nombre_archivo = "C:/Users/a913353/Downloads/perth_3_8_23_H_18.json"
-file = "archivo.csv"
-means = "medias.csv"
-
-t1_values, t2_values, readout_error_values, readout_length_values, prob_01_values, prob_10_values, rz_error_values, rz_length_values, x_error_values, x_length_values, sx_error_values, sx_length_values, cnot_error_values, cnot_length_values  = filter(nombre_archivo)
-
-datos = {
+data = {
     'T1': t1_values,
     'T2': t2_values,
     'readout_error': readout_error_values,
@@ -84,9 +91,11 @@ datos = {
     'sx_length': sx_length_values,
 }
 
-df = pd.DataFrame(datos)
+df = pd.DataFrame(data)
 print(df)
-df.to_csv(file, index=False)
+df.to_csv(file_data, index=False)
+
+'''
 
 mediaT1 = mean(t1_values)
 mediaT2 = mean(t2_values)
@@ -122,4 +131,6 @@ means = {
 
 df2 = pd.DataFrame(means, index=[0])
 print(df2)
-df2.to_csv("medias.csv", index=False)
+df2.to_csv(file_means, index=False)
+
+'''
