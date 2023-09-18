@@ -2,18 +2,19 @@ import json
 import pandas as pd
 
 class FilterJSON:
-
+    #Method that return a .csv file with the mean of the values of the json file
     def getCSV(self, file_input, file_output = None):
-
+        #Function that calculate the mean of a list
         def mean(lista, opcional_lista = []):
             mean = (sum(lista) + sum(opcional_lista))/ len(lista)
             return mean
 
         try:
-
+            #Open the json file
             with open(file_input, 'r') as archivo:
                 data = json.load(archivo)
 
+            #Create the lists that will contain the values of the json file
             t1_values = []
             t2_values = []
             readout_error_values = []
@@ -30,6 +31,7 @@ class FilterJSON:
             cnot_error_values = []
             cnot_length_values = []
 
+            #Get the values of qubits of the json file
             for qubits in data['qubits']:
                 for qubit_data in qubits:
                     if qubit_data['name'] == 'T1':
@@ -46,7 +48,8 @@ class FilterJSON:
                         prob_10_values.append(qubit_data['value'])
                     else:
                         pass
-        
+            
+            #Get the values of gates of the json file
             for gate_data in data['gates']:
                 if gate_data['gate'] == 'rz':
                     rz_error_values.append(gate_data['parameters'][0]['value'])
@@ -63,6 +66,7 @@ class FilterJSON:
                 else:
                     pass
 
+            #Calculate the mean of the values
             mean_t1 = mean(t1_values)
             mean_t2 = mean(t2_values)
             mean_readoutError = mean(readout_error_values)
@@ -75,6 +79,7 @@ class FilterJSON:
             mean_sx = mean(sx_error_values, sx_length_values)
             mean_cnot = mean(cnot_error_values, cnot_length_values)
 
+            #Create a dictionary with the means
             means = {
                 'T1': mean_t1,
                 'T2': mean_t2,
@@ -88,6 +93,7 @@ class FilterJSON:
                 'CNOT': mean_cnot,
             }
 
+            #Create a dataframe with the dictionary
             df = pd.DataFrame(means, index=[0])
             df.to_csv('means.csv', index=False)
                             
