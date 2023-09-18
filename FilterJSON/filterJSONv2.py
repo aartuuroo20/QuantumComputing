@@ -3,10 +3,10 @@ import pandas as pd
 
 class FilterJSON:
     #Method that return a .csv file with the mean of the values of the json file
-    def getCSV(self, file_input, file_output = None):
+    def get_CSV(self, file_input, file_output = None):
         #Function that calculate the mean of a list
-        def mean(lista, opcional_lista = []):
-            mean = (sum(lista) + sum(opcional_lista))/ len(lista)
+        def mean(lista):
+            mean = sum(lista) / len(lista)
             return mean
 
         try:
@@ -67,17 +67,22 @@ class FilterJSON:
                     pass
 
             #Calculate the mean of the values
-            mean_t1 = mean(t1_values)
+            mean_t1 = mean(t1_values) 
             mean_t2 = mean(t2_values)
             mean_readoutError = mean(readout_error_values)
             mean_readoutLenght = mean(readout_length_values)
             mean_prob01 = mean(prob_01_values)
             mean_prob10 = mean(prob_10_values)
+            mean_meas = (mean_prob01 + mean_prob10) / 2
 
-            mean_rz = mean(rz_error_values, rz_length_values)
-            mean_x = mean(x_error_values, x_length_values)
-            mean_sx = mean(sx_error_values, sx_length_values)
-            mean_cnot = mean(cnot_error_values, cnot_length_values)
+            mean_rz_error = mean(rz_error_values)
+            mean_rz_length = mean(rz_length_values)
+            mean_x_error = mean(x_error_values)
+            mean_x_length = mean(x_length_values)
+            mean_sx_error = mean(sx_error_values)
+            mean_sx_length = mean(sx_length_values)
+            mean_cnot_error = mean(cnot_error_values)
+            mean_cnot_length = mean(cnot_length_values)
 
             #Create a dictionary with the means
             means = {
@@ -85,17 +90,25 @@ class FilterJSON:
                 'T2': mean_t2,
                 'readout_error': mean_readoutError,
                 'readout_length': mean_readoutLenght,
-                'prob_meas0_prep1': mean_prob01,
-                'prob_meas1_prep0': mean_prob10,
-                'RZ': mean_rz,
-                'X': mean_x,
-                'Sx': mean_sx,
-                'CNOT': mean_cnot,
+                'meas': mean_meas,
+                'RZ_error': mean_rz_error,
+                'RZ_length': mean_rz_length,
+                'X_error': mean_x_error,
+                'X_length': mean_x_length,
+                'Sx_error': mean_sx_error,
+                'Sx_length': mean_sx_length,
+                'CNOT_error': mean_cnot_error,
+                'CNOT_length': mean_cnot_length
             }
 
             #Create a dataframe with the dictionary
             df = pd.DataFrame(means, index=[0])
-            df.to_csv('means.csv', index=False)
+
+            #Save the dataframe in a .csv file, if the user doesn't specify a file name and path, the file will be saved as 'means.csv'
+            if file_output == None:
+                df.to_csv('means.csv', index=False)
+            else:
+                df.to_csv(file_output, index=False)
                             
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"Error: {e}")
