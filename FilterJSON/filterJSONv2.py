@@ -2,13 +2,19 @@ import json
 import pandas as pd
 
 class FilterJSON:
+    
     #Method that return a .csv file with the mean of the values of the json file
     def get_CSV(self, file_input, file_output = None):
+
         #Function that calculate the mean of a list
         def mean(lista):
             mean = sum(lista) / len(lista)
             return mean
-
+        
+        #Function that convert the values of T1 and T2 from us to ns
+        def us_to_ns(mean):
+            mean = mean * 1000
+            return mean
         try:
             #Open the json file
             with open(file_input, 'r') as archivo:
@@ -67,8 +73,8 @@ class FilterJSON:
                     pass
 
             #Calculate the mean of the values
-            mean_t1 = mean(t1_values) 
-            mean_t2 = mean(t2_values)
+            mean_t1 = us_to_ns(mean(t1_values)) 
+            mean_t2 = us_to_ns(mean(t2_values))
             mean_readoutError = mean(readout_error_values)
             mean_readoutLenght = mean(readout_length_values)
             mean_prob01 = mean(prob_01_values)

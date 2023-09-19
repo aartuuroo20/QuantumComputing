@@ -6,7 +6,7 @@ json_file_name = "C:/Users/a913353/Downloads/perth_3_8_23_H_18.json"
 output_file = "C:/Users/a913353/Downloads/means.csv"
 
 json_object = FilterJSON()
-json_object.get_CSV(json_file_name, output_file)
+json_object.get_CSV(json_file_name)
 
 #Asignar a cada valor del csv una variable.
 
@@ -17,7 +17,7 @@ t1_mean = data['T1'].mean()
 t2_mean = data['T2'].mean()
 readout_error_mean = data['readout_error'].mean()
 readout_length_mean = data['readout_length'].mean()
-
+meas_mean = data['meas'].mean()
 
 rz_error_mean = data['RZ_error'].mean()
 rz_length_mean = data['RZ_length'].mean()
