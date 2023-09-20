@@ -128,7 +128,6 @@ class FilterJSON:
                 df.to_csv('default_results.csv', index=False)
             else:
                 df.to_csv(file_output, index=False)
-                file_output.close()
                             
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"Error: {e}")
