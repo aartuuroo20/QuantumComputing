@@ -124,7 +124,7 @@ class FilterJSON:
             df = pd.DataFrame(means, index=[0])
 
             #Save the dataframe in a .csv file, if the user doesn't specify a file name and path, the file will be saved as 'means.csv'
-            if file_output == None:
+            if file_output == None or file_output == "":
                 df.to_csv('default_results.csv', index=False)
             else:
                 df.to_csv(file_output, index=False)

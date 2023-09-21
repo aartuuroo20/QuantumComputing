@@ -10,42 +10,30 @@ json_object.get_CSV(json_file_name)
 #Asignar a cada valor del csv una variable.
 
 if output_file == "" or output_file == None:
-    with open("./default_results.csv", 'r') as archivo:
-        data = pd.read_csv(archivo)
+    output_file = "./default_results.csv"
 
-    t1_mean = data['T1'].mean()
-    t2_mean = data['T2'].mean()
-    readout_error_mean = data['E_readout'].mean()
-    readout_length_mean = data['L_readout'].mean()
-    meas_mean = data['E_meas'].mean()
+with open(output_file, 'r') as archivo:
+    data = pd.read_csv(archivo)
+archivo.close()
 
-    rz_error_mean = data['E_rz'].mean()
-    rz_length_mean = data['L_rz'].mean()
-    x_error_mean = data['E_x'].mean()
-    x_length_mean = data['L_x'].mean()
-    sx_error_mean = data['E_sx'].mean()
-    sx_length_mean = data['L_sx'].mean()
-    cnot_error_mean = data['E_cnot'].mean()
-    cnot_length_mean = data['L_cnot'].mean()
+#T1 and T2
+T1 = data['T1'].mean()
+T2 = data['T2'].mean()
 
-else:
-    with open(output_file, 'r') as archivo:
-        data = pd.read_csv(archivo)
-    
-    t1_mean = data['T1'].mean()
-    t2_mean = data['T2'].mean()
-    readout_error_mean = data['E_readout'].mean()
-    readout_length_mean = data['L_readout'].mean()
-    meas_mean = data['E_meas'].mean()
+#Lenght gates
+L_readout = data['L_readout'].mean()
+L_rz = data['L_rz'].mean()
+L_x = data['L_x'].mean()
+L_sx = data['L_sx'].mean()
+L_cnot = data['L_cnot'].mean()
 
-    rz_error_mean = data['E_rz'].mean()
-    rz_length_mean = data['L_rz'].mean()
-    x_error_mean = data['E_x'].mean()
-    x_length_mean = data['L_x'].mean()
-    sx_error_mean = data['E_sx'].mean()
-    sx_length_mean = data['L_sx'].mean()
-    cnot_error_mean = data['E_cnot'].mean()
-    cnot_length_mean = data['L_cnot'].mean()
+#Error gates
+E_readout = data['E_readout'].mean()
+E_meas = data['E_meas'].mean()
+E_rz = data['E_rz'].mean()
+E_x = data['E_x'].mean()
+E_sx = data['E_sx'].mean()
+E_cnot = data['E_cnot'].mean()
 
     
 
