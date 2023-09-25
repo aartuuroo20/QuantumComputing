@@ -1,18 +1,15 @@
 import pandas as pd
 from filterJSONv2 import FilterJSON
 
-json_file_name = "C:/Users/a913353/Downloads/perth_3_8_23_H_18.json"
-output_file = "C:/Users/a913353/Downloads/meas.csv"
+#Paths of json and output files
+json_file_name = "write path of json file"
+output_file = "write path of output file"
 
 json_object = FilterJSON()
-json_object.get_CSV(json_file_name)
+file_path = json_object.get_CSV(json_file_name)
 
-#Asignar a cada valor del csv una variable.
-
-if output_file == "" or output_file == None:
-    output_file = "./default_results.csv"
-
-with open(output_file, 'r') as archivo:
+#Open the json file and load the data in a variable then close the file
+with open(file_path, 'r') as archivo:
     data = pd.read_csv(archivo)
 archivo.close()
 

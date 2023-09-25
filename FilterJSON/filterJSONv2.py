@@ -4,7 +4,7 @@ import pandas as pd
 class FilterJSON:
     
     #Method that return a .csv file with the mean of the values of the json file
-    def get_CSV(self, file_input, file_output = None):
+    def get_CSV(self, file_input, file_output = './default_results.csv'):
 
         #Function that calculate the mean of a list
         def mean(lista):
@@ -128,6 +128,8 @@ class FilterJSON:
                 df.to_csv('default_results.csv', index=False)
             else:
                 df.to_csv(file_output, index=False)
+
+            return file_output
                             
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"Error: {e}")
