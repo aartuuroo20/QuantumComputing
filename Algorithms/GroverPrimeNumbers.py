@@ -2,6 +2,7 @@ from numpy import *
 import math
 from qat.lang.AQASM import Program, H, X, Z, QRoutine, CustomGate
 from qat.qpus import get_default_qpu
+from qat.core import Parameter
 
 #We create a matrix class which will be initialized with 0 making a matrix of size number x number also 
 #we create a function to fill the diagonal of the matrix with -1 and 1 depending if the number is prime or not
