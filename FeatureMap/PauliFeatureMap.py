@@ -21,8 +21,8 @@ class PauliFeatureMap:
         insert_barriers: bool = False,
         name: str = "PauliFeatureMap",
     ) -> None:
-                
-        super().__init__(
+            
+        '''
             num_qubits=feature_dimension,
             reps=reps,
             rotation_blocks=HGate(),
@@ -31,13 +31,14 @@ class PauliFeatureMap:
             insert_barriers=insert_barriers,
             skip_final_rotation_layer=True,
             name=name,
+        '''   
+                
+        super().__init__(
         )
 
         self._data_map_func = data_map_func or self.self_product
         self._paulis = paulis or ["Z", "ZZ"]
         self._alpha = alpha
-    
-    help(__init__)
     
     def _parameter_generator(self, rep: int, block: int, indices: List[int]) -> Optional[List[Variable]]:
         params = [self.ordered_parameters[i] for i in indices]

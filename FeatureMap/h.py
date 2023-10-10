@@ -1,24 +1,33 @@
 from typing import Optional, Callable, List, Union
-from qat.lang.AQASM import Program
-
+from qat.lang.AQASM import Program, S, T, CNOT, PH, H,CustomGate
+import numpy as np
 
 class HGate():
     def __init__(self, label: Optional[str] = None, duration=None, unit=None, _condition=None):
         if unit is None:
             unit = "dt"
         super().__init__(
-            "h", 1, [], label=label, _condition=_condition, duration=duration, unit=unit
+            #"h", 1, [], label=label, _condition=_condition, duration=duration, unit=unit
         )
     
     def _define(self):
-        q = QuantumRegister(1, "q")
-        qc = QuantumCircuit(q, name=self.name)
-        rules = [(U2Gate(0, pi), [q[0]], [])]
+        qprogram = Program()
+        q = qprogram.qalloc(1)
+        qc = qprogram.to_circ()
+
+        complejo = 1j
+        euler = np.exp(np.pi * complejo)
+
+        matrix = np.matrix([[1, -euler], [1, euler]])
+        u2Gate = CustomGate(matrix)
+
+        rules = [(u2Gate(q[0]))]
         for instr, qargs, cargs in rules:
             qc._append(instr, qargs, cargs)
 
         self.definition = qc
 
+    '''
     def control(
         self,
         num_ctrl_qubits: int = 1,
@@ -29,11 +38,13 @@ class HGate():
             gate = CHGate(label=label, ctrl_state=ctrl_state, _base_label=self.label)
             return gate
         return super().control(num_ctrl_qubits=num_ctrl_qubits, label=label, ctrl_state=ctrl_state)
-
+    '''
+    
     def inverse(self):
         r"""Return inverted H gate (itself)."""
         return HGate()  # self-inverse
-    
+
+'''
 class CHGate():
 
     def __init__(
@@ -53,22 +64,24 @@ class CHGate():
         )
 
     def _define(self):
-        q = QuantumRegister(2, "q")
-        qc = QuantumCircuit(q, name=self.name)
+        qprogram = Program()
+        q=qprogram.qalloc(2)
+        circ = qprogram.to_circ()
         rules = [
-            (SGate(), [q[1]], []),
+            (S(q[0])),
             (HGate(), [q[1]], []),
-            (TGate(), [q[1]], []),
-            (CXGate(), [q[0], q[1]], []),
-            (TdgGate(), [q[1]], []),
+            (T(q[0])),
+            (CNOT(q[0], q[1])),
+            (PH(-np.pi/4)(q[1])),
             (HGate(), [q[1]], []),
-            (SdgGate(), [q[1]], []),
+            (PH(-np.pi/2)(q[1])),
         ]
         for instr, qargs, cargs in rules:
-            qc._append(instr, qargs, cargs)
+            circ._append(instr, qargs, cargs)
 
-        self.definition = qc
+        self.definition = circ
 
     def inverse(self):
         """Return inverted CH gate (itself)."""
         return CHGate(ctrl_state=self.ctrl_state)  # self-inverse
+'''
