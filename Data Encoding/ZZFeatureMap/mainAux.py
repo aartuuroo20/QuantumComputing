@@ -27,11 +27,14 @@ qprogram = Program()
 nqubits = 2
 qubits = qprogram.qalloc(nqubits)
 
+varData0 = Variable("varData0")
+varData1 = Variable("varData1")
+
 H(qubits[0])
 H(qubits[1])
 
 X(qubits[1])
-PH(2*(np.pi - X_aux[0][0]) * (np.pi - X_aux[0][1]))(qubits[1])
+PH(2*(np.pi - varData0) * (np.pi - varData1))(qubits[1])
 H(qubits[1])
 X(qubits[1])
 
