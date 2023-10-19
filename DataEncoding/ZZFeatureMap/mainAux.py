@@ -42,11 +42,18 @@ for i in range(8):
 #Creation of the ZZFeatureMap
 H(qubits[0])
 H(qubits[1])
-
-X(qubits[1])
+PH(2* ListVarData[0])(qubits[0])
+PH(2* ListVarData[1])(qubits[1])
+CNOT(qubits[0], qubits[1])
 PH(2*(np.pi - ListVarData[0]) * (np.pi - ListVarData[1]))(qubits[1])
+CNOT(qubits[0], qubits[1])
+H(qubits[0])
 H(qubits[1])
-X(qubits[1])
+PH(2* ListVarData[0])(qubits[0])
+PH(2* ListVarData[1])(qubits[1])
+CNOT(qubits[0], qubits[1])
+PH(2*(np.pi - ListVarData[0]) * (np.pi - ListVarData[1]))(qubits[1])
+CNOT(qubits[0], qubits[1])
 
 #Creation of variational circuit
 RY(ListVarTheta[0])(qubits[0])
