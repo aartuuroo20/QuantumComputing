@@ -17,6 +17,9 @@ circuit = qprogram.to_circ(include_matrices=True)
 job = circuit.to_job()
 result = get_default_qpu().submit(job)
 
+for sample in result:
+    print("State %s probability %s" % (sample.state, sample.probability))
+
 circuit.display()
 
 
