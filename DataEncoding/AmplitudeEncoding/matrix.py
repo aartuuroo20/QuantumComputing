@@ -15,7 +15,10 @@ class Matrix:
             Q, R = np.linalg.qr(X)
             return Q
         
-        matrix_aux = gram_schmidt_columns(matrix)
+        self.matrix_aux = gram_schmidt_columns(matrix)
+
+    def printMatrix(self):
+        print(self.matrix_aux)
 
 
         
