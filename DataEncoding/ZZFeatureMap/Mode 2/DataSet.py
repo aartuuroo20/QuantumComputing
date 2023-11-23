@@ -20,7 +20,7 @@ class DataSet:
 
     #Function that return the dataset
     def GetItems(self):
-        print(self.X)
+        return self.X
     
     #Function that create a plot of the dataset
     def Draw(self):

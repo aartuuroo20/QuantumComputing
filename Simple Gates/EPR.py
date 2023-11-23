@@ -1,18 +1,3 @@
-# ----------------------------------------------------------------------
-# myQLM - Hello Quantum World
-# ----------------------------------------------------------------------
-# Andrés Bravo Montes
-# Atos Iberia
-# BDS HPC & Quantum
-# Curso de Formación Básico
-# Created 21/02/2023
-# Version: v1.0 
-# ----------------------------------------------------------------------
-
-# ----------------------------------------------------------------------
-# Par EPR (Declaración del circuito cuántico)
-# ----------------------------------------------------------------------
-
 # =======  HEADER =========
 from qat.lang.AQASM import Program, H, CNOT
 from qat.qpus import get_default_qpu

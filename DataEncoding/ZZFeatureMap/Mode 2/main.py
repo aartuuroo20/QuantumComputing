@@ -3,6 +3,7 @@ from Circuit import Circuit
 
 dataset = DataSet()
 dataset.Draw()
+data = dataset.GetItems()
 
 circuit = Circuit()
 circuit.ZZFeatureMap()

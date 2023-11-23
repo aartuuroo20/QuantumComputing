@@ -1,23 +1,20 @@
 # =======  HEADER =========
-from qat.lang.AQASM import Program, CNOT, X
+from qat.lang.AQASM import Program, Z, X
 from qat.qpus import get_default_qpu
-
 
 # =======  BEGIN =========
 # Declaramos un programa
 qprogram = Program()
 
 # Inicializamos el número de qubits y cbits
-nqubits = 2
+nqubits = 1
 
 # =======  BODY =========
 # Asignamos los qubits
 qubits=qprogram.qalloc(nqubits)
 
 # Asignamos las puertas cuánticas 
-#X(qubits[0])
-#X(qubits[1])
-CNOT(qubits[0], qubits[1])
+Z(qubits[0])
 
 # Exportamos este programa a un circuito cuántico
 circuit = qprogram.to_circ()
@@ -38,10 +35,3 @@ result = qpu.submit(job)
 # Iteramos sobre el vector de estado para obtener la probabilidad
 for sample in result:
     print("State %s probability %s" % (sample.state, sample.probability))
-
-#La puerta CNOT solo puede actuar cuando tenemos como minimo dos qubits,
-#uno actua como control y el otro como objetivo, 
-# unicamente actua cuando control vale 1 realizando una operacion X en el objetivo.
-
-#Al tener dos qbits y unicamente actuar cuando control es 1 sabemos que la probabilidad sera del 100% 
-#de que el estado final sea 11, ya que el estado inicial es 00 y al aplicar la puerta CNOT el estado final es 11.
