@@ -9,5 +9,3 @@ The repository consists of the following elements:
 -Scripts: Python scripts for later use in data extraction from excel and csv.
 -Plugins: Implementation of different plugins of the Eviden myQLM open source framework.
 -Simple gates: Implementation of quantum gates using myQLM.
-
-Translated with DeepL.com (free version)
