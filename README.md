@@ -2,7 +2,7 @@
 
 Este repositorio contiene múltiples scripts, ejemplos y módulos sobre computación cuántica, codificación de datos, criptografía clásica y moderna, así como experimentos con puertas lógicas y loaders personalizados.
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ### Algorithms
 Implementaciones de algoritmos cuánticos como:
