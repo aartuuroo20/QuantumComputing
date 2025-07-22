@@ -1,11 +1,39 @@
 # QuantumComputing
 
-In this repository I attach all my projects and works done with quantum computing during my stay in the HPC & Quantum department of Eviden Iberia.
+Este repositorio contiene múltiples scripts, ejemplos y módulos sobre computación cuántica, codificación de datos, criptografía clásica y moderna, así como experimentos con puertas lógicas y loaders personalizados.
 
-The repository consists of the following elements:
--Algorithms: In this folder you can find those algorithms developed on quantum computing such as Grover's algorithm.
--Classical Cryptography: Different types of classical encryption algorithms for further research and possible application in quantum.
--Data encoding: Types of classical data encoding in quantum for further use in e.g. machine learning.
--Scripts: Python scripts for later use in data extraction from excel and csv.
--Plugins: Implementation of different plugins of the Eviden myQLM open source framework.
--Simple gates: Implementation of quantum gates using myQLM.
+## 📁 Estructura del Proyecto
+
+### `Algorithms/`
+Implementaciones de algoritmos cuánticos como:
+- Grover aplicado a palíndromos y números primos
+- Scripts de testeo de Grover
+
+### `ClassicalCryptography/`
+Implementaciones de criptografía tradicional:
+- RSA, DSA, ECC, DH
+- Cifrado César, AES y funciones hash
+- Intercambio de claves y firmas digitales
+
+### `DataEncoding/`
+Métodos para codificar información en estados cuánticos:
+- Amplitude Encoding
+- Angle Encoding
+- Basis Encoding
+- ZZ Feature Maps en distintos modos
+
+### `Simple Gates/`
+Ejemplos de puertas cuánticas fundamentales:
+- CNOT, CZ, EPR, Hadamard, Pauli-X, Z
+
+### `Plugins/`
+Herramientas auxiliares para experimentos:
+- Divisor de observables, optimizadores, circuitos en línea
+
+### `Scripts/`
+Ejemplos clasificados por meses con:
+- Análisis de tasa de error en IBM y Qaptiva
+- Procesamiento de resultados JSON
+
+### `helloWorld.py`
+Ejemplo base de ejecución cuántica.
